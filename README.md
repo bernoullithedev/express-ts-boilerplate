@@ -1,123 +1,143 @@
-# Express.js, Typescript, Biome Boilerplate
+Here’s a refined and polished version of your **Express.js + TypeScript + Biome** boilerplate README. I’ve improved grammar, tightened explanations, and adjusted formatting for clarity and readability while keeping your original content intact.
 
-## Overview
+---
 
-This project is a boilerplate for building scalable and modular applications using Express.js with TypeScript. It leverages a suite of packages to enhance development and ensure code quality:
+# 🚀 Express.js + TypeScript + Biome Boilerplate
 
-- **express**: A fast, unopinionated, minimalist web framework for Node.js.
-- **typescript**: A strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.
-- **biome**: A tool for code formatting and linting.
-- **dotenv**: Loads environment variables from a `.env` file into `process.env`.
-- **cors**: Middleware for enabling CORS (Cross-Origin Resource Sharing).
-- **helmet**: Helps secure Express apps by setting various HTTP headers.
-- **morgan**: HTTP request logger middleware.
-- **winston**: A logger for JavaScript with support for multiple transports.
-- **luxon**: A library for working with dates and times.
-- **zod**: A TypeScript-first schema declaration and validation library.
+A modern boilerplate to build scalable, secure, and maintainable REST APIs using **Express.js** and **TypeScript**, with code quality enforced via **Biome**.
 
-## Features
+---
 
-- RESTful API endpoints for managing resources
-- Authentication and authorization mechanisms
-- Error handling and logging
-- Scalable and modular architecture
+## 📦 Tech Stack
 
-## Repository Structure
+- **[Express](https://expressjs.com/)** – Minimal and flexible Node.js web application framework.
+- **[TypeScript](https://www.typescriptlang.org/)** – JavaScript with static types.
+- **[Biome](https://biomejs.dev/)** – All-in-one tool for linting, formatting, and more.
+- **[dotenv](https://www.npmjs.com/package/dotenv)** – Loads environment variables from `.env` file.
+- **[cors](https://www.npmjs.com/package/cors)** – Middleware for Cross-Origin Resource Sharing.
+- **[helmet](https://helmetjs.github.io/)** – Sets secure HTTP headers.
+- **[morgan](https://www.npmjs.com/package/morgan)** – HTTP request logger.
+- **[winston](https://www.npmjs.com/package/winston)** – Versatile logging library.
+- **[luxon](https://moment.github.io/luxon/)** – Date and time utility library.
+- **[zod](https://zod.dev/)** – Type-safe schema validation library.
+
+---
+
+## ✨ Features
+
+- 🧱 Modular project architecture
+- 🛡️ Secure setup with Helmet and CORS
+- 🔐 Authentication & Authorization ready
+- ⚙️ Environment-based config management
+- 🧪 Centralized error handling
+- 🧾 Logging with Winston
+- ✅ Type-safe validation using Zod
+- 💅 Code linting and formatting via Biome
+- ⚡ Deployed via Vercel (optional)
+
+---
+
+## 🧭 Project Structure
 
 ```
 express-ts-boilerplate/
-├── .env
-├── .env.example
+├── .env                         # Environment variables
+├── .env.example                 # Sample environment file
 ├── .gitignore
-├── .husky/
+├── .husky/                      # Pre-commit hook
 │   └── pre-commit
-├── api/
+├── api/                         # API entry layer (optional organization)
 │   └── index.ts
-├── biome.json
-├── config/
+├── biome.json                   # Biome config
+├── config/                      # Environment-specific configuration
 │   ├── custom-environment-variables.json
 │   ├── default.json
 │   ├── development.json
 │   ├── production.json
 │   └── stage.json
-├── package.json
-├── public/
+├── public/                      # Static assets
 │   └── index.html
-├── README.md
-├── src/
-│   ├── app.ts
-│   ├── connections/
-│   │   └── .gitkeep
-│   ├── controllers/
+├── src/                         # Main application source
+│   ├── app.ts                   # App bootstrap
+│   ├── index.ts                 # Server start
+│   ├── connections/             # Database/other service connections
+│   ├── controllers/             # Route controllers
 │   │   └── health.ts
-│   ├── index.ts
-│   ├── interactor/
-│   │   └── .gitkeep
-│   ├── lib/
+│   ├── interactor/              # Business logic layer
+│   ├── lib/                     # Shared utilities
 │   │   ├── controllerWrapper.ts
 │   │   └── error/
 │   │       └── custom.error.ts
-│   ├── middlewares/
+│   ├── middlewares/            # Middleware logic
 │   │   ├── middlewares.ts
 │   │   └── response.ts
-│   ├── models/
-│   │   └── .gitkeep
-│   ├── routes.ts
-│   ├── services/
-│   │   └── .gitkeep
-│   └── utils/
+│   ├── models/                  # Data models
+│   ├── routes.ts                # API route definitions
+│   ├── services/                # Service layer
+│   └── utils/                   # Logger, helper functions
 │       ├── logger.ts
 │       └── winstonLogger.ts
+├── package.json
 ├── tsconfig.json
-└── vercel.json
+└── vercel.json                  # Vercel deployment config
 ```
 
-### Directory Details
+---
 
-- **api/**: Contains API endpoint definitions and related logic.
-- **config/**: Configuration files for different environments.
-- **public/**: Static assets and public files.
-- **src/**: Main source code including application logic, models, controllers, and services.
-- **.husky/**: Configuration for Husky pre-commit hooks.
-- **.env**: Environment variables file.
-- **.env.example**: Sample environment configuration file.
-- **biome.json**: Configuration for Biome.
-- **package.json**: Node.js project metadata and dependencies.
-- **tsconfig.json**: TypeScript configuration file.
-- **vercel.json**: Configuration for deployment on Vercel.
-
-## Setup and Installation
+## ⚙️ Getting Started
 
 1. **Clone the repository:**
 
-   ```sh
+   ```bash
    git clone https://github.com/arnavsharma2711/express-ts-boilerplate.git
    cd express-ts-boilerplate
    ```
 
 2. **Install dependencies:**
 
-   ```sh
+   ```bash
    npm install
    ```
 
 3. **Setup environment variables:**
 
-   Copy `.env.example` to `.env` and configure the environment variables.
-
-   ```sh
+   ```bash
    cp .env.example .env
    ```
 
-4. **Run the application:**
+4. **Run in development mode:**
 
-   ```sh
+   ```bash
    npm run dev
    ```
 
-## Technologies Used
+---
 
-- **Language**: TypeScript
-- **Environment**: Node
-- **Framework**: Express
-- **Deployment**: Vercel
+## 🛠️ Scripts
+
+| Script         | Description                    |
+|----------------|--------------------------------|
+| `npm run dev`  | Run server with live reload via `ts-node-dev` |
+| `npm run build`| Transpile TypeScript to JavaScript |
+| `npm run start`| Run the built server |
+| `npm run format` | Format code using Biome |
+| `npm run lint`   | Lint code using Biome |
+
+---
+
+## 🌐 Deployment
+
+This project includes a `vercel.json` file for easy deployment on [Vercel](https://vercel.com/). Just push the repo to GitHub and import it into Vercel for automatic deployment.
+
+---
+
+## 🧪 TODOs / Future Enhancements
+
+- Add unit and integration testing setup (Jest or Vitest)
+- Add Swagger API docs
+- JWT-based authentication
+- Support for multiple database adapters (e.g., MongoDB, PostgreSQL)
+
+---
+
+Let me know if you'd like to add Docker support, a CI pipeline, or Prisma integration next!
