@@ -1,6 +1,5 @@
 import { controllerWrapper } from "../lib/controllerWrapper";
 import { response } from "../middlewares/response";
-import { sql } from "../utils/db";
 
 export const createExpense = controllerWrapper(async (req, _res) => {
     // Logic to create an expense would go here
@@ -13,19 +12,15 @@ if(amount===undefined || !user_id || !title||!category ||!type){
     return;
 }
 
-const result= await sql`INSERT INTO transactions (user_id, title, amount,category,type) VALUES (${user_id}, ${title}, ${amount}, ${category},${type}) RETURNING *`;
-
     response.success({
-        data:result,
+        data:[],
         message: "Expense created successfully",
     });
 });
 export const getExpenses = controllerWrapper(async (_req, _res) => {
     // Logic to get expenses would go here
-    const expenses = await sql`SELECT * FROM transactions`;
-    console.log(expenses);
     response.success({
-        data: expenses,
+        data: [],
         message: "List of expenses",
     });
 });
@@ -33,8 +28,7 @@ export const getExpenses = controllerWrapper(async (_req, _res) => {
 export const getUserExpenses = controllerWrapper(async (req, _res) => {
     // Logic to get a single expense by ID would go here
     const { userId } = req.params;
-    const expense = await sql`SELECT * FROM transactions WHERE user_id = ${userId}`;
-    if (expense.length === 0) {
+    if (userId.length === 0) {
         response.fail({
             status: 404,
             message: "Expense not found",
@@ -42,27 +36,19 @@ export const getUserExpenses = controllerWrapper(async (req, _res) => {
         return;
     }
     response.success({
-        data: expense,
+        data: [],
         message: "Expense details",
     });
 });
 
-export const getUserSummary = controllerWrapper(async (req, _res) => {
+export const getUserSummary = controllerWrapper(async (_req, _res) => {
     // Logic to get a summary of expenses for a user would go here
-    const { userId } = req.params;
-    const balanceResult = await sql`
-    SELECT COALESCE(SUM(amount), 0) AS balance FROM transactions WHERE user_id = ${userId}`;
-
-    const incomeResult = await sql`
-    SELECT COALESCE(SUM(amount), 0) AS income FROM transactions WHERE user_id = ${userId} AND amount > 0`;
- 
-    const expenseResult = await sql`
-    SELECT COALESCE(SUM(amount), 0) AS expense FROM transactions WHERE user_id = ${userId} AND amount < 0`;
+    // const { userId } = req.params;
 
     const summary = {
-        balance: balanceResult[0]?.balance || 0,
-        income: incomeResult[0]?.income || 0,
-        expense: expenseResult[0]?.expense || 0,
+        balance: 0,
+        income: 0,
+        expense: 0,
     };
 
     
@@ -83,7 +69,7 @@ export const deleteExpense = controllerWrapper(async (req, _res) => {
         });
         return;
     }
-    const result = await sql`DELETE FROM transactions WHERE id = ${id} RETURNING *`;
+    const result = [];
     if (result.length === 0) {
         response.fail({
             status: 404,
@@ -92,7 +78,7 @@ export const deleteExpense = controllerWrapper(async (req, _res) => {
         return;
     }
     response.success({
-        data: result,
+        data: [],
         message: "Expense deleted successfully",
     });
 });

@@ -1,11 +1,11 @@
 {
-  "name": "express-ts-boilerplate",
+  "name": "outdoze-backend",
   "version": "1.0.0",
-  "description": "A boilerplate for building scalable and modular applications using Express.js with TypeScript.",
-  "author": "Arnav Sharma <arnavsharma2711@gmail.com>",
+  "description": "Outdoze Backend",
+  "author": "BernoulliTheDev <bernoullithedev@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/arnavsharma2711/express-ts-boilerplate.git"
+    "url": "https://github.com/bernoullithedev/outdoze-backend.git"
   },
   "license": "MIT",
   "main": "src/index.ts",
@@ -22,7 +22,6 @@
   },
   "keywords": [],
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.1",
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.4",
     "biome": "^0.3.3",
@@ -31,7 +30,7 @@
     "cors": "^2.8.5",
     "debug": "^4.4.0",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
     "helmet": "^8.0.0",
     "luxon": "^3.5.0",
     "morgan": "^1.10.0",
@@ -42,6 +41,7 @@
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.2",
     "@types/config": "^3.3.5",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
