@@ -1,20 +1,22 @@
 import express from "express";
-import { healthCheck } from "./controllers/health";
-import { createExpense, deleteExpense, getExpenses, getUserExpenses, getUserSummary } from "./controllers/expense";
+import authRoutes from "./routes/auth";
 
 const router = express.Router();
 
-router.get("/health", healthCheck);
+// Auth routes - handles /api/auth/*
+router.use("/auth", authRoutes);
 
-router.post("/transactions",createExpense);
+// router.get("/health", healthCheck);
 
-router.get("/transactions",getExpenses);
+// router.post("/transactions",createExpense);
 
-router.get("/transactions/user/:userId",getUserExpenses);
+// router.get("/transactions",getExpenses);
 
-router.get("/transactions/summary/:userId",getUserSummary);
+// router.get("/transactions/user/:userId",getUserExpenses);
 
-router.delete("/transactions/:id",deleteExpense);
+// router.get("/transactions/summary/:userId",getUserSummary);
+
+// router.delete("/transactions/:id",deleteExpense);
 
 
 

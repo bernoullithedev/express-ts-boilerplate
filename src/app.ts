@@ -6,17 +6,19 @@ import cookieParserMiddleware from "cookie-parser";
 import path from "node:path";
 import responseMiddleware from "./middlewares/response";
 import { handleError, handleNotFound } from "./middlewares/middlewares";
+import { toNodeHandler } from "better-auth/node";
 // Importing API routes
 import apiRoutes from "./routes";
 import rateLimiter from "./middlewares/rate-limiter";
 import dotenv from "dotenv";
+import { auth } from "./lib/auth";
 dotenv.config();
 const expressApp = express();
 expressApp.use(rateLimiter)
 expressApp.use(morganLogger("dev"));
 expressApp.use(helmetSecurity());
 expressApp.use(corsMiddleware());
-
+expressApp.all('/api/auth/{*any}', toNodeHandler(auth));
 expressApp.use(express.json());
 expressApp.use(cookieParserMiddleware());
 expressApp.use(responseMiddleware);

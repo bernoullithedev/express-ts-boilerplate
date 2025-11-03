@@ -15,15 +15,24 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "format": "npx @biomejs/biome format --write ./src",
-    "vercel-build": "echo 'vercel-build'"
+    "vercel-build": "echo 'vercel-build'",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
   },
   "lint-staged": {
     "*.ts": "npm run format && npm run typecheck"
   },
   "keywords": [],
   "dependencies": {
+    "@better-auth/expo": "^1.3.34",
+    "@paralleldrive/cuid2": "^3.0.4",
+    "@prisma/client": "^6.18.0",
+    "@prisma/extension-accelerate": "^2.0.2",
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.4",
+    "better-auth": "^1.3.34",
     "biome": "^0.3.3",
     "config": "^3.3.12",
     "cookie-parser": "^1.4.7",
@@ -51,6 +60,7 @@
     "husky": "^8.0.0",
     "lint-staged": "^15.3.0",
     "nodemon": "^3.1.9",
+    "prisma": "^6.18.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }

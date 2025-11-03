@@ -1,0 +1,219 @@
+// Prisma Schema for Outdoze
+// This schema integrates with Better-Auth for authentication
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+// ============================================================================
+// AUTH & USER TABLES
+// ============================================================================
+
+// Core auth model managed by Better-Auth
+// Holds private authentication data
+model User {
+  id        String    @id @default(cuid())
+  email     String?   @unique
+  emailVerified Boolean @default(false)
+  name      String?
+  image     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // --- Relations ---
+  profile   Profile?
+  accounts  Account[]
+  sessions  Session[]
+
+  @@map("users")
+}
+
+// Required by Better-Auth to link social accounts
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  provider        String  // "tiktok", "google", etc.
+  providerAccountId         String  // The user's ID from the provider
+  accessToken       String? @db.Text
+  refreshToken      String? @db.Text
+  idToken           String? @db.Text
+  expiresAt         DateTime?
+  password          String? @db.Text
+  
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+// Better-Auth session management
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  token String @unique
+  ipAddress String?
+  userAgent String?
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@map("sessions")
+}
+
+// Public-facing user profile
+model Profile {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  name      String?
+  bio       String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // 1:1 link to auth User
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // --- Relations ---
+  collections         Collection[] @relation("CollectionOwner")
+  collaboratingOn     Collection[] @relation("Collaborators")
+  following           Collection[] @relation("Followers")
+  voteSessions        VoteSession[]
+  
+  @@index([username])
+  @@map("profiles")
+}
+
+// ============================================================================
+// CORE CONTENT TABLES
+// ============================================================================
+
+model Place {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  images        String[]  @default([])
+  
+  // Location Data
+  address       String?
+  latitude      Float
+  longitude     Float
+  neighborhood  String?
+  
+  // Verification & Metadata
+  isVerified    Boolean   @default(false)
+  googlePlaceId String?   @unique
+  category      String?
+  priceRange    String?
+  
+  // Admin-only related videos
+  relatedVideos String[]  @default([])
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // --- Relations ---
+  collections         Collection[]
+  deals               Deal[]
+  voteTallies         VoteTally[]
+  winningVoteSessions VoteSession[]
+  
+  @@index([googlePlaceId])
+  @@index([latitude, longitude])
+  @@index([isVerified])
+  @@index([category])
+  @@map("places")
+}
+
+model Collection {
+  id        String   @id @default(cuid())
+  name      String
+  isPublic  Boolean  @default(false)
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // --- Relations ---
+  ownerId   String
+  owner     Profile  @relation("CollectionOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  places        Place[]
+  collaborators Profile[] @relation("Collaborators")
+  followers     Profile[] @relation("Followers")
+  voteSessions  VoteSession[]
+  
+  @@index([ownerId])
+  @@index([isPublic])
+  @@map("collections")
+}
+
+model Deal {
+  id           String    @id @default(cuid())
+  description  String
+  expiryDate   DateTime
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  // --- Relations ---
+  placeId String
+  place   Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  
+  @@index([placeId])
+  @@index([expiryDate])
+  @@map("deals")
+}
+
+// ============================================================================
+// VOTING TABLES (Anonymous Tally Model)
+// ============================================================================
+
+model VoteSession {
+  id        String   @id @default(cuid())
+  status    String   @default("ACTIVE") // "ACTIVE", "COMPLETED", "TIE"
+  deadline  DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // --- Relations ---
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  
+  ownerId      String
+  owner        Profile    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  // Final result
+  winningPlaceId String?
+  winningPlace   Place?   @relation(fields: [winningPlaceId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  
+  tallies      VoteTally[]
+  
+  @@index([collectionId])
+  @@index([status, deadline])
+  @@index([ownerId])
+  @@map("vote_sessions")
+}
+
+// Anonymous counter table for votes
+model VoteTally {
+  id       String @id @default(cuid())
+  yesVotes Int    @default(0)
+  
+  // --- Relations ---
+  sessionId String
+  session   VoteSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  placeId String
+  place   Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  
+  @@unique([sessionId, placeId])
+  @@index([sessionId])
+  @@map("vote_tallies")
+}
